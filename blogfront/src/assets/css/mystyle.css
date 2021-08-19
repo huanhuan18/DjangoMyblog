@@ -27,6 +27,20 @@ body,html {
     height: 100vh;
     position: fixed;
     z-index: 1001;
+    transition: all 0.3s ease;
+}
+#left-menu.xs {
+    margin-left: -200px;
+    transition: all 0.3s ease;
+}
+#left-menu #left-btn {
+    font-size: 40px;
+    color: #ffc815;
+    position: absolute;
+    left: 220px;
+    height: 60px;
+    display: flex;
+    align-items: center;
 }
 
 /* 页面内容 */
@@ -37,7 +51,12 @@ body,html {
     margin-right: 20px;
     padding: 10px 0;
 }
-
+#content.xs {
+    margin-left: 20px;
+}
+#content.lg {
+    margin-left: 20px;
+}
 /* 页面底部 */
 #footer {
     color: #fff;
@@ -46,6 +65,57 @@ body,html {
     text-align: center;
     margin-top: 10px;
     padding: 10px 0;
+}
+
+/* #其他 */
+.el-submenu__title:hover {
+    /* !important表示提高优先级 */
+    background-color: #00000060!important;
+}
+.el-menu-item:hover {
+    background-color: #00000060!important;
+}
+.el-menu {
+    border: none;
+}
+.el-menu i {
+    color: #ffc815;
+}
+/* AddArticle组件中的样式，因为局部无法直接修改框架中的样式，所以放全局中修改 */
+.el-form-item__label {
+    color: #fff!important;
+}
+.el-input input {
+    background: #00000060;
+    color: #fff;
+    border: none;
+}
+
+/* summernote */
+.note-btn {
+    color: #fff;
+}
+.note-btn:hover {
+    color: #ffc815;
+}
+.dropdown-menu {
+    background: #00000060;
+    color: #fff;
+}
+.dropdown-menu a {
+    color: #fff;
+}
+.popover {
+    background-color: #00000060;
+}
+.note-editable {
+    background: #00000060;
+    color: #fff;
+}
+.el-textarea__inner {
+    background: #00000060;
+    border: none;
+    color: #fff;
 }
 
 /* template50 */
