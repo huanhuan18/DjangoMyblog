@@ -96,4 +96,57 @@
 		def add_article(request):
 			return Response('ok')
 	9>在settings.py中添加跨域配置
-	10>书写api文档  apipost
+	10>书写api文档  apipost/swagger   //个人token  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
+		pip install drf-yasg2
+		更新项目文件里的 settings.py 来加载 drf_yasg2 
+			INSTALLED_APPS = ['drf_yasg2']
+		更新项目里的 urls.py 文件来加载 the schema_view
+			# drf_yasg2 从这里开始
+			from rest_framework import permissions
+			from drf_yasg2.views import get_schema_view
+			from drf_yasg2 import openapi
+			schema_view = get_schema_view(
+				openapi.Info(
+					title="Tweet API",
+					default_version='v1',
+					description="Welcome to the world of Tweet",
+					terms_of_service="https://www.tweet.org",
+					contact=openapi.Contact(email="demo@tweet.org"),
+					license=openapi.License(name="Awesome IP"),
+				),
+				public=True,
+				permission_classes=(permissions.AllowAny,),
+			)
+			urlpatterns = [
+				re_path(r'^doc(?P<format>\.json|\.yaml)$',schema_view.without_ui(cache_timeout=0), name='schema-json'),  #<-- 这里
+				path('doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),  #<-- 这里
+				path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),  #<-- 这里
+			]
+### 64.Python爬虫利器 Beautiful
+	1>点击保存文章按钮在审查元素界面->Network->XHR->请求中可以看到传入的四个字段，然后在后端中获取它
+	2>在api.py中直接获取title会发现500报错，这时需要将传入的字段格式化
+	3>在AddArticle.vue中添加import Qs from 'qs'
+		axios.post('http://127.0.0.1:9000/api/add-article/',Qs.stringify(article_data))，此时可正确获取到title字段
+	4>安装beautofulsoup  pip install beautifulsoup4并导入from bs4 import BeautifulSoup
+		soup = BeautifulSoup(content, 'html.parser')
+		imgList = soup.find_all('img')
+		print(imgList[0]['src'])
+	5>导入requests
+### 65.保存远程图片（下载）
+	1>image = requests.get(src)  # 请求远程图片
+	2>from PIL import Image
+	  from io import BytesIO
+	  image_data = Image.open(BytesIO(image.content))  # 转化为二进制
+	3>image_data.save('upload/' + image_name + '.png')
+	//示例远程图片  https://www.dweb.club/img/logo.d58a9d80.png
+### 66.保存本地图片（上传）
+	1>import base64
+	  image_data = base64.b64decode(src.split(',')[1])   //将二进制通过base64变成可操作的
+	2>把图片二进制写入一个文件with open(image_url, 'wb') as f:
+								f.write(image_data)
+	3>保存一个文章的所有字段
+		new_article = Article(title=title)
+		new_article.content = content
+		new_article.describe = describe
+		new_article.cover = cover
+		new_article.save()
