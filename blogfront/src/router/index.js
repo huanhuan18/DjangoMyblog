@@ -10,6 +10,18 @@ const routes = [
     name: 'Home',
     component: Home
   },
+  //登录
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue')
+  },
+  //注册
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/Register.vue')
+  },
   {
     path: '/add-article',
     name: 'AddArticle',

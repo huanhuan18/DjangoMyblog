@@ -5,14 +5,14 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
-# # 用户信息
-# class Userinfo(models.Model):
-#     headImg = models.ImageField()
-#     nickName = models.CharField()
-#     belong = models.OneToOneField(User)
+# 用户信息
+class Userinfo(models.Model):
+    headImg = models.ImageField(null=True,blank=True, max_length=200)
+    nickName = models.CharField(null=True,blank=True, max_length=200)
+    belong = models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
 
-#     def __int__(self):
-#         return self.id
+    def __int__(self):
+        return self.id
 
 
 # # 分类

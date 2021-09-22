@@ -150,3 +150,23 @@
 		new_article.describe = describe
 		new_article.cover = cover
 		new_article.save()
+		
+	//0901个人token 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
+	git remote set-url origin https://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@github.com/huanhuan18/mywork.git
+### 67.用户管理 登录注册api接口
+	1>在settings.py中的INSTALLED_APPS中加入'rest_framework.authtoken',
+	2>执行数据表迁移python manage.py migrate
+	3>编辑models.py中的Userinfo表，然后继续制作数据库并迁移
+	4>将Userinfo表加入到admin.py中，方便在admin中可以看到
+	5>在api_url.py中写两个接口api.gf_login和api.gf_register，并在api.py中添加对应的函数
+	6>在api.py中导入django自带的User表和Token表
+		from django.contrib.auth.models import User
+		from rest_framework.authtoken.models import Token
+		from django.contrib.auth.hashers import check_password, make_password
+### 68.前端：登录注册页 Api接通传递Token
+	1>在index.js中添加登录和注册路由，并在views下新建两个vue文件
+	2>编辑Login.vue和Register.vue(superuser:gf123, gaofei123)
+	3>将2中获取到的token存入vuex内管理
+		在store下的index.js内编辑state（相当于data）和mutations(相当于methods,官方文档中说明了state只能由mutations修改)
+		在Login.vue和Register中使用，例如this.$store.commit('saveUserinfo', res.data)  //第一个参数是方法，第二个是该方法需要传入的数据
+	4>查看vuex中的状态->在vue ui的依赖下安装vue devtools插件
