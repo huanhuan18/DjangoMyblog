@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -25,7 +26,14 @@ const routes = [
   {
     path: '/add-article',
     name: 'AddArticle',
-    component: () => import('../views/AddArticle.vue')
+    component: () => import('../views/AddArticle.vue'),
+    beforeEnter: (to, from, next) => {
+      if (store.state.userinfo.token) {
+        next()
+      }else{
+        next('/login')
+      }
+    }
   },
   {
     path: '/about',
@@ -36,13 +44,21 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
-// const routerPush = VueRouter.prototype.push
-// VueRouter.prototype.push = function push(location) {
-//   return routerPush.call(this,location)
-// }
+
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this,location)
+}
 
 const router = new VueRouter({
   routes
 })
+
+//全局路由
+// router.beforeEach((to,from,next)=>{
+//   console.log("to:"+to.path)
+//   console.log("from:"+from.path)
+//   next()
+// })
 
 export default router

@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import Qs from 'qs'
+// import axios from "axios";
+// import Qs from "qs";
 export default {
   data() {
     return {
@@ -53,26 +53,27 @@ export default {
         return;
       }
       if (this.formData.password != this.formData.password2) {
-          alert('两次密码不一致')
-          return
+        alert("两次密码不一致");
+        return;
       }
       if (this.formData.password.length < 8) {
-          alert('密码太短')
-          return
+        alert("密码太短");
+        return;
       }
       //提交注册
-      axios({
-          method:'post',
-          url: 'http://127.0.0.1:9000/api/gf-register/',
-          data: Qs.stringify(this.formData)
-      }).then((res)=>{
-          if (res.data=='repeat') {
-              alert('用户名已存在')
-              return
-          }
-          console.log(res.data)
-          this.$store.commit('saveUserinfo', res.data)
-      })
+      //   axios({
+      //     method: "post",
+      //     url: "http://127.0.0.1:9000/api/gf-register/",
+      //     data: Qs.stringify(this.formData),
+      //   }).then((res) => {
+      //     if (res.data == "repeat") {
+      //       alert("用户名已存在");
+      //       return;
+      //     }
+      //     console.log(res.data);
+      //     this.$store.commit("saveUserinfo", res.data);
+      //   });
+      this.$store.dispatch("blogRegister", this.formData);
     },
   },
 };

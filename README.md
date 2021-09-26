@@ -151,7 +151,7 @@
 		new_article.cover = cover
 		new_article.save()
 		
-	//0901个人token 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
+	//0901个人token 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
 	git remote set-url origin https://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@github.com/huanhuan18/mywork.git
 ### 67.用户管理 登录注册api接口
 	1>在settings.py中的INSTALLED_APPS中加入'rest_framework.authtoken',
@@ -170,3 +170,21 @@
 		在store下的index.js内编辑state（相当于data）和mutations(相当于methods,官方文档中说明了state只能由mutations修改)
 		在Login.vue和Register中使用，例如this.$store.commit('saveUserinfo', res.data)  //第一个参数是方法，第二个是该方法需要传入的数据
 	4>查看vuex中的状态->在vue ui的依赖下安装vue devtools插件
+### 69.vuex管理异步请求 actions的方法写入与使用
+	1>在store下的index.js内编辑actions,将ajax请求放到vuex中统一管理
+	2>修改登录注册中原先的调用方法为this.$store.dispatch("blogLogin", this.formData); //dispatch就是调用actions中的方法
+### 70.路由鉴权与路由守卫
+	1>在index.js中的路由下添加
+		beforeEnter: (to, from, next) => {
+		  if (store.state.userinfo.token) {
+			next()
+		  }else{
+			next('/login')
+		  }
+		}
+		设置路由守卫报错Redirected when going from "/1-2" to "/add-article" via a navigation guard.
+		解决：将版本vue-router版本降到3.0.7（npm uninstall vue-router;   npm install vue-router@3.0.7）
+	2>在index.js内定义全局路由
+		router.beforeEach((to,from,next)=>{})   //注意要在定义const router下面用，否则会报错undefined
+	3>在Login.vue中定义局部路由
+		beforeRouteEnter (to, from, next) {}
