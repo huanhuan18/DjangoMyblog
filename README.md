@@ -188,3 +188,25 @@
 		router.beforeEach((to,from,next)=>{})   //注意要在定义const router下面用，否则会报错undefined
 	3>在Login.vue中定义局部路由
 		beforeRouteEnter (to, from, next) {}
+### 71.登录状态修改UI
+	1>在store下的index.js中的登录和注册成功后加入router.push({path:'/'})
+	2>getters去集合查询state中的各种信息，在里面写入方法isnotUserlogin(state)
+	3>使用computed  //同data,区别是data中只能是对象，但是computed里面可以是方法，在里面加入authUserLogin方法
+	4>在App.vued的 退出登录的标签上加上v-if="authUserLogin"，这样在未登录状态时就不展示退出登录
+	5>在store下的index.js中的mutations里加入clearUserinfo方法
+	6>在App.vued的 退出登录的标签上加上blogLogout()方法
+	7>将登出方法也写到在store下的index.js中的actions里面，方便管理，在App.vue中this.$store.dispatch('blogLogout')这样去调用它
+### 72.自动登录与token重置
+	1>watch用来监听方法的变化，在App.vue中加入watch监听authUserLogin方法
+	2>登录注册成功之后就在本地缓存token    //localStorage.setItem('token',res.data.token)
+	3>自动登录原理：刷新时调取缓存中的token   //localStorage.getItem('token')  然后post给后端获得用户信息
+		实现：先在store下的index.js中的actions写入tryAutoLogin方法，
+			  然后在App.vue中的created生命周期内执行该函数，这个生命周期比mounted早一点，在它之前
+			  然后在后端添加自动登录的路由auto-login和获取token的方法gf_autoLogin	
+			  然后在actions中的自动登录方法内加入登录的逻辑（保存token）
+	4>在actions中的登出方法内点击退出登录就删除token    //localStorage.removeItem('token')
+	5>重置token原理：点击退出登录的那一刻将token发送到后端，然后删掉该token，下一次再登录就重新获取
+		实现：修改actions中的blogLogout方法
+			  然后在后端添加对应的路由和函数
+			  最后在App.vue中的登出方法中传入token参数   //this.$store.dispatch('blogLogout',this.$store.getters.isnotUserlogin)
+	6>优化自动登录：在不同设备（localhost和局域网ip）中退出登录删除token之后另一设备提示token过期

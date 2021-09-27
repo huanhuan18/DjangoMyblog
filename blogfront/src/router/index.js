@@ -3,13 +3,21 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import store from '../store'
 
+
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter: (to, from, next) => {
+      if (store.state.userinfo.token) {
+        next()
+      }else{
+        next('/login')
+      }
+    }
   },
   //登录
   {
