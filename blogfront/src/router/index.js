@@ -31,10 +31,24 @@ const routes = [
     name: 'Register',
     component: () => import('../views/Register.vue')
   },
+  //发布文章
   {
     path: '/add-article',
     name: 'AddArticle',
     component: () => import('../views/AddArticle.vue'),
+    beforeEnter: (to, from, next) => {
+      if (store.state.userinfo.token) {
+        next()
+      }else{
+        next('/login')
+      }
+    }
+  },
+  //文章列表
+  {
+    path: '/article-list',
+    name: 'ArticleList',
+    component: () => import('../views/ArticleList.vue'),
     beforeEnter: (to, from, next) => {
       if (store.state.userinfo.token) {
         next()

@@ -210,3 +210,21 @@
 			  然后在后端添加对应的路由和函数
 			  最后在App.vue中的登出方法中传入token参数   //this.$store.dispatch('blogLogout',this.$store.getters.isnotUserlogin)
 	6>优化自动登录：在不同设备（localhost和局域网ip）中退出登录删除token之后另一设备提示token过期
+### 73.文章列表页与前端分页器
+	1>编写文章列表页，现在views里添加ArticleList.vue，并在index.js内分配路由，然后在App.vue中的文章列表标签上加上路由
+	2>编辑ArticleList.vue,在mystyle.css中修改文章列表页的面包屑样式
+	  相对路径图片绑定  <el-image :src="require('../assets/img/article1.png')"></el-image>
+	3>将App.vue中的screenWidth传给子组件<router-view :screenWidth="screenWidth"></router-view>，子组件中props:['screenWidth']获取继续编辑
+	4>添加分页器
+### 74.列表分页交互与文章删除
+	1.后端导入django自带分页器from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+	2.可以通过这种方式将增删改查方法写在一个路由里面
+		@api_view(['GET','DELETE])
+			def articleList(request):
+				if request.methos=='DELETE':
+					xxx
+	3.执行删除操作时要在axios中加入，否则会415报错
+		headers:{
+          "Content-Type": "application/x-www-form-urlencoded",
+        }
+	4.浏览器自带的删除验证提示框if (confirm('是否确定删除')){xxx}
