@@ -151,7 +151,7 @@
 		new_article.cover = cover
 		new_article.save()
 		
-	//0901个人token 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
+	//0901个人token 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
 	git remote set-url origin https://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@github.com/huanhuan18/mywork.git
 ### 67.用户管理 登录注册api接口
 	1>在settings.py中的INSTALLED_APPS中加入'rest_framework.authtoken',
@@ -228,3 +228,18 @@
           "Content-Type": "application/x-www-form-urlencoded",
         }
 	4.浏览器自带的删除验证提示框if (confirm('是否确定删除')){xxx}
+### 75.Django用户鉴权 与 权限系统设计
+	1>新建UserPerm.vue
+### 76.用户组的功能开发 创建赋权并分配用户
+	User模型和权限之间可以通过以下几种方式来进行管理
+	1.user.user_permissions.set(permission_list)  :直接给定一个权限的列表
+	2.user.user_permissions.add(permission,permission,...)  :一个个添加权限
+	3.user.user_permissions.remover(permission,permission,...)  :一个个删除权限
+	4.user.user_permissions.clear()  :清除权限
+	5.user.has_perm('<app_name>.<codename>')   :判断是否拥有某个权限
+	6.user.get_all_permission()  :获得所有权限
+	
+	1>鉴权时用户管理页虽然没有权限，但是也能在背景中看到页面，所以要将鉴权的异步请求变为同步请求
+		将vuex中的鉴权方法checkUserPerm前加上async,然后在axios前加上await，这样就等鉴权请求拿到结果之后才去处理后面的请求了。
+		如果鉴权不通过，后面的请求根本就不会再执行，不会再到后端了。
+	2>运用上述代码优化ArticleList.vue中的删除文章方法

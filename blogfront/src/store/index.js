@@ -14,6 +14,10 @@ export default new Vuex.Store({
     //查询登录状态
     isnotUserlogin(state) {
       return state.userinfo.token
+    },
+    //获取用户名
+    getUserName(state) {
+      return state.userinfo.nickName
     }
   },
   mutations: {
@@ -65,6 +69,7 @@ export default new Vuex.Store({
         //缓存
         localStorage.setItem('token', res.data.token)
         router.push({ path: '/' })
+        location.reload()
       });
     },
     //自动登录
@@ -89,16 +94,52 @@ export default new Vuex.Store({
       }
     },
     //登出
-    blogLogout({ commit },token) {
+    blogLogout({ commit }, token) {
       commit('clearUserinfo')
       localStorage.removeItem('token')
       axios({
-        method:'post',
+        method: 'post',
         url: 'http://127.0.0.1:9000/api/gf-logout/',
-        data: Qs.stringify({token})
-      }).then((res)=>{
+        data: Qs.stringify({ token })
+      }).then((res) => {
         console.log(res.data)
       })
+    },
+    //权限判断
+    async checkUserPerm({ getters }, checkInfo) {
+      //用户
+      let token = getters.isnotUserlogin
+      //表
+      let contentType = checkInfo.contentType
+      //权限
+      let permissions = checkInfo.permissions
+      //鉴权结果
+      let perm_data;
+      await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:9000/api/gf-checkperm/',
+        data: Qs.stringify({
+          token,
+          contentType,
+          permissions: JSON.stringify(permissions)
+        })
+      }).then((res) => {
+        // console.log(res.data)
+        if (res.data == 'nologin') {
+          perm_data = false
+          alert('用户信息错误')
+          return
+        }
+        if (res.data == 'noperm') {
+          perm_data = false
+          alert('用户权限不足，联系管理员')
+          return
+        }
+        if (res.data == 'ok') {
+          perm_data = true
+        }
+      })
+      return perm_data
     }
   },
   modules: {
